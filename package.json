@@ -1,0 +1,8 @@
+{
+  "name": "img-cleaner",
+  "version": "1.0.0",
+  "description": "finds unused images in a app",
+  "main": "index.js",
+  "author": "WrathXL <christianrd96@gmail.com>",
+  "license": "MIT"
+}
