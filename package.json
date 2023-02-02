@@ -1,8 +1,21 @@
 {
-  "name": "img-cleaner",
+  "name": "vue-unused-keys",
   "version": "1.0.0",
-  "description": "finds unused images in a app",
+  "description": "finds unused string keys in a app",
   "main": "index.js",
   "author": "WrathXL <christianrd96@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "@vue/compiler-sfc": "^3.2.45",
+    "esprima": "^4.0.1",
+    "is-hidden-file": "^1.1.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.1",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-promise": "^6.0.0"
+  }
 }
