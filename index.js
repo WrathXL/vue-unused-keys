@@ -1,26 +1,29 @@
-import { listString } from './src/parser.js'
 import Fs from 'fs'
 import Path from 'path'
 import { isHiddenFile } from 'is-hidden-file'
+import { listString } from './src/parser.js'
 
 const EXTENSIONS = ['js', 'ts', 'vue']
-const ROOT = '.'
+const IGNORE = ['node_modules']
+const ROOT = './test-data/ActiveContracts.vue'
 
 function fileExtension(file) {
   return file.split('.').at(-1)
 }
 
 function DirectoryVisitor(root, files) {
-  const items = Fs.readdirSync(root)
-  items.forEach((item) => {
-    const path = Path.join(root, item)
-    if (item === 'node_modules' || isHiddenFile(path)) return
-    if (Fs.statSync(path).isDirectory()) {
-      DirectoryVisitor(path, files)
-    } else if (EXTENSIONS.includes(fileExtension(item))) {
-      files.push(path)
+  if (IGNORE.find((ignore) => root.includes(ignore)) || isHiddenFile(root))
+    return
+
+  if (!Fs.statSync(root).isDirectory()) {
+    if (EXTENSIONS.includes(fileExtension(root))) {
+      files.push(root)
     }
-  })
+    return
+  }
+
+  const items = Fs.readdirSync(root)
+  items.forEach((item) => DirectoryVisitor(Path.join(root, item), files))
 }
 
 function loadFiles(root) {
@@ -34,5 +37,5 @@ function loadFiles(root) {
 
 const codes = loadFiles(ROOT)
 const allStrings = listString(codes)
-
+// Fs.writeFileSync('test.txt', JSON.stringify(allStrings))
 console.log(allStrings)
