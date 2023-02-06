@@ -1,18 +1,24 @@
-import fs from 'fs'
 import vueCompiler from '@vue/compiler-sfc'
 import esprima from 'esprima'
 
 function vueToJavascript(code) {
   const { descriptor } = vueCompiler.parse(code)
-  const { code: templateCode } = vueCompiler.compileTemplate({
-    source: descriptor.template.content,
-    id: ''
-  })
-  const scriptCode = vueCompiler.compileScript(descriptor, {
-    reactivityTransform: true
-  }).content
+  const javascript = []
+  if (descriptor.template) {
+    const { code: templateCode } = vueCompiler.compileTemplate({
+      source: descriptor.template.content,
+      id: ''
+    })
+    javascript.push(templateCode)
+  }
+  if (descriptor.script || descriptor.scriptSetup) {
+    const scriptCode = vueCompiler.compileScript(descriptor, {
+      reactivityTransform: true
+    }).content
+    javascript.push(scriptCode)
+  }
 
-  return [templateCode, scriptCode]
+  return javascript
 }
 
 function getStringValues(code) {
